@@ -1,8 +1,7 @@
 import requests
-from requests.auth import HTTPBasicAuth
 import os, sys, shutil
 import json
-# something
+
 class Unsplash:
     creds = {
     "Accept" : "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
