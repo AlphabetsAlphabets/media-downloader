@@ -39,11 +39,3 @@ class Unsplash:
     def Check_Response(self):
         r = requests.get(self.url, headers=self.creds)
         return r
-
-class Instagram:
-    def __init__(self, user):
-        self.user = user
-
-    def download(self):
-        pass
-
