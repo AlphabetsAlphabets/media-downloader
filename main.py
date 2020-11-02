@@ -2,6 +2,10 @@ import requests
 import os, sys, shutil
 import json
 
+from bs4 import BeautifulSoup as BS
+from selenium.webdriver import webdriver
+from selenium.webdriver.firefox.options import Options
+
 class Unsplash:
     creds = {
     "Accept" : "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -11,7 +15,12 @@ class Unsplash:
     }
 
     def __init__(self, term):
-        self.term = term
+        if " " in term:
+            term = term.split(" ")
+            self.term = "+".join(term)
+        else:
+            self.term = term
+
         self.url = f"https://unsplash.com/napi/search?query={self.term}&xp=&per_page=20"
 
     def download(self):
@@ -39,3 +48,28 @@ class Unsplash:
     def Check_Response(self):
         r = requests.get(self.url, headers=self.creds)
         return r
+
+class Youtube:
+    opts = Options()
+    opts.headless = True
+    driver = webdriver.Firefox(options=opts)
+
+    def __init__(self, term):
+        if " " in term:
+            term = term.split(" ")
+            self.term = "+".join(term)
+        else:
+            self.term = term
+
+        self.url = f"https://unsplash.com/napi/search?query={self.term}&xp=&per_page=20"
+
+    def GetLink(self):
+        self.driver.get(self.url)
+        sleep(0.5)
+        source = self.driver.execite_script("return document.documentElement.outerHTML")
+        soup = BS(source, "lxml")
+
+
+
+    def download(self):
+
