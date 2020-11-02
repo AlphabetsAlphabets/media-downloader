@@ -1,9 +1,10 @@
 import requests
-import os, sys, shutil
 import json
+import os, sys, shutil
+from time import sleep
 
 from bs4 import BeautifulSoup as BS
-from selenium.webdriver import webdriver
+from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
 class Unsplash:
@@ -66,10 +67,17 @@ class Youtube:
     def GetLink(self):
         self.driver.get(self.url)
         sleep(0.5)
-        source = self.driver.execite_script("return document.documentElement.outerHTML")
+        source = self.driver.execute_script("return document.documentElement.outerHTML")
+        self.driver.quit()
         soup = BS(source, "lxml")
 
+        videoClass = "style-scope ytd-vertical-list-renderer"
+        videos = soup.find_all("div", class_=videoClass)
+        for index, video in enumerate(videos, start=1):
+            vidLink = video.ytd-video-renderer.div.ytd-thumbnail.a
+            print(f"{index}. {vidLink}")
 
+        sys.exit()
 
     def download(self):
-
+        pass
