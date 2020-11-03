@@ -1,4 +1,5 @@
 import requests, json
+from pytube import Youtube as YT
 import os, sys, shutil
 
 from time import sleep
@@ -50,7 +51,7 @@ class Unsplash:
         r = requests.get(self.url, headers=self.creds)
         return r
 
-class Youtube:
+class Media:
     opts = Options()
     opts.headless = True
     driver = webdriver.Firefox(options=opts)
@@ -67,18 +68,37 @@ class Youtube:
     def GetLink(self):
         self.driver.get(self.url)
         sleep(0.5)
+
         source = self.driver.execute_script("return document.documentElement.outerHTML")
         self.driver.quit()
         soup = BS(source, "lxml")
 
-        videoClass = "style-scope ytd-vertical-list-renderer"
-        videos = soup.find_all("div", class_=videoClass)
-        print(videos) 
+        videoClass = "yt-simple-endpoint style-scope ytd-video-renderer"
+        videos = soup.find_all('a', class_=videoClass)
+
         for index, video in enumerate(videos, start=1):
-            vidLink = video.ytd-video-renderer.div.ytd-thumbnail.a
-            print(f"{index}. {vidLink}")
+           print(f"{index}. {video['title']}")
+
+        select = int(input("Reference video by number: "))
+        self.vidLink = videos[select - 1]['href']
 
         sys.exit()
 
+    def exists(self):
+        exists = os.path.exists("media")
+        if exists == False:
+            os.mkdir("media")
+            self.path = os.getcwd() + "\\media"
+
+        else:
+            self.path = os.getcwd() + "\\media"
+
     def download(self):
-        pass
+        self.GetLink()
+
+        yt = YT(self.vidLink)
+        stream = yt.streams[0]
+
+        self.exists()
+
+        stream.download(self.path)
