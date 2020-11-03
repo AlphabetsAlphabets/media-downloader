@@ -56,14 +56,14 @@ class Media:
     opts.headless = True
     driver = webdriver.Firefox(options=opts)
 
-    def __init__(self, term):
+    def __init__(self, video):
         if " " in term:
-            term = term.split(" ")
-            self.term = "+".join(term)
-        else:
-            self.term = term
+            term = video.split(" ")
+            term = "+".join(term)
+            self.url = f"https://unsplash.com/napi/search?query={term}&xp=&per_page=20"
 
-        self.url = f"https://unsplash.com/napi/search?query={self.term}&xp=&per_page=20"
+        elif "https://" in video:
+            self.url = video
 
     def GetLink(self):
         self.driver.get(self.url)
@@ -76,11 +76,18 @@ class Media:
         videoClass = "yt-simple-endpoint style-scope ytd-video-renderer"
         videos = soup.find_all('a', class_=videoClass)
 
-        for index, video in enumerate(videos, start=1):
-           print(f"{index}. {video['title']}")
+        print(f"Is this the video you're looking for?\n{videos[0]['title']}")
+        check = input("Y/n ").lower()
 
-        select = int(input("Reference video by number: "))
-        self.vidLink = videos[select - 1]['href']
+        if check == "y":
+            self.vidLink = videos[0]['href']
+        else:
+            print("Select from this selection of videos to download, and try to find yours.")
+            for index, video in enumerate(videos, start=1):
+               print(f"{index}. {video['title']}")
+
+            select = int(input("Reference video by number: "))
+            self.vidLink = videos[select - 1]['href']
 
         sys.exit()
 
