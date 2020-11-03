@@ -16,12 +16,23 @@ class Unsplash:
     "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0"
     }
 
-    def __init__(self, term):
+    resos = ['raw', 'full', 'regular', 'small', 'thumb']
+
+    def __init__(self, term, quality="small"):
         if " " in term:
             term = term.split(" ")
             self.term = "+".join(term)
+            if quality in self.resos:
+                self.quality = quality
+            else:
+                self.quality = "small"
+
         else:
             self.term = term
+            if quality in self.resos:
+                self.quality = quality
+            else:
+                self.quality = "small"
 
         self.url = f"https://unsplash.com/napi/search?query={self.term}&xp=&per_page=20"
 
@@ -38,13 +49,12 @@ class Unsplash:
         total = r['photos']['results']
         for item in total:
             name = item['id']
-            image = item['urls']['small']
+            image = item['urls'][self.quality]
 
             with open(f"{path}\\{name}.jpg", 'wb') as f:
                 r = requests.get(image, headers=self.creds).content
                 f.write(r)
 
-        print(f"Download complete. Downloaded a total of: {len(total)}")
         sys.exit()
 
     def Check_Response(self):
@@ -56,16 +66,18 @@ class Media:
     opts.headless = True
     driver = webdriver.Firefox(options=opts)
 
-    def __init__(self, video):
+    def __init__(self, video, mp3=False):
         if " " in video:
             term = video.split(" ")
             term = "+".join(term)
             self.url = f"https://www.youtube.com/results?search_query={term}"
             self.link = False
+            self.mp3 = mp3
 
         elif "https://" in video:
             self.url = video
             self.link = True
+            self.mp3 = mp3
 
     def GetLink(self):
         self.driver.get(self.url)
@@ -97,7 +109,6 @@ class Media:
         if exists == False:
             os.mkdir("media")
             self.path = os.getcwd() + "\\media"
-            return self.path
 
         else:
             self.path = os.getcwd() + "\\media"
@@ -109,8 +120,11 @@ class Media:
 
             self.exists()
 
-            stream.download(self.path)
+            file = stream.download(self.path)
+            if self.mp3 == True:
+                os.rename(file, f"{file}.mp3")
 
+            sys.exit()
         else:
             self.GetLink()
 
@@ -119,4 +133,8 @@ class Media:
 
             self.exists()
 
-            stream.download(self.path)
+            file = stream.download(self.path)
+            if self.mp3 == True:
+                os.rename(file, f"{file}.mp3")
+
+            sys.exit()
