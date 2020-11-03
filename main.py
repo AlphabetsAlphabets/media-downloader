@@ -1,6 +1,6 @@
-import requests
-import json
+import requests, json
 import os, sys, shutil
+
 from time import sleep
 
 from bs4 import BeautifulSoup as BS
@@ -73,6 +73,7 @@ class Youtube:
 
         videoClass = "style-scope ytd-vertical-list-renderer"
         videos = soup.find_all("div", class_=videoClass)
+        print(videos) 
         for index, video in enumerate(videos, start=1):
             vidLink = video.ytd-video-renderer.div.ytd-thumbnail.a
             print(f"{index}. {vidLink}")
