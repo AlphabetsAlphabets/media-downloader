@@ -64,6 +64,7 @@ class Media:
 
         elif "https://" in video:
             self.url = video
+            self.link = True
 
     def GetLink(self):
         self.driver.get(self.url)
@@ -88,24 +89,34 @@ class Media:
 
             select = int(input("Reference video by number: "))
             self.vidLink = videos[select - 1]['href']
-
-        sys.exit()
+            return self.vidLink
 
     def exists(self):
         exists = os.path.exists("media")
         if exists == False:
             os.mkdir("media")
             self.path = os.getcwd() + "\\media"
+            return self.path
 
         else:
             self.path = os.getcwd() + "\\media"
+            return self.path
 
     def download(self):
-        self.GetLink()
+        if self.link:
+            yt = YT(self.url)
+            stream = yt.streams[0]
 
-        yt = YT(self.vidLink)
-        stream = yt.streams[0]
+            self.exists()
 
-        self.exists()
+            stream.download(self.path)
 
-        stream.download(self.path)
+        else:
+            self.GetLink()
+
+            yt = YT(self.vidLink)
+            stream = yt.streams[0]
+
+            self.exists()
+
+            stream.download(self.path)
