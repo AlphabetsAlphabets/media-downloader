@@ -2,7 +2,7 @@ __pycache__
 content
 media
 
+geckodriver.log
+
 use.py
 dev.py
-
-geckodriver.log

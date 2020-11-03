@@ -1,6 +1,12 @@
-import requests
+import requests, json
+from pytube import Youtube as YT
 import os, sys, shutil
-import json
+
+from time import sleep
+
+from bs4 import BeautifulSoup as BS
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 
 class Unsplash:
     creds = {
@@ -11,7 +17,12 @@ class Unsplash:
     }
 
     def __init__(self, term):
-        self.term = term
+        if " " in term:
+            term = term.split(" ")
+            self.term = "+".join(term)
+        else:
+            self.term = term
+
         self.url = f"https://unsplash.com/napi/search?query={self.term}&xp=&per_page=20"
 
     def download(self):
@@ -39,3 +50,55 @@ class Unsplash:
     def Check_Response(self):
         r = requests.get(self.url, headers=self.creds)
         return r
+
+class Media:
+    opts = Options()
+    opts.headless = True
+    driver = webdriver.Firefox(options=opts)
+
+    def __init__(self, term):
+        if " " in term:
+            term = term.split(" ")
+            self.term = "+".join(term)
+        else:
+            self.term = term
+
+        self.url = f"https://unsplash.com/napi/search?query={self.term}&xp=&per_page=20"
+
+    def GetLink(self):
+        self.driver.get(self.url)
+        sleep(0.5)
+
+        source = self.driver.execute_script("return document.documentElement.outerHTML")
+        self.driver.quit()
+        soup = BS(source, "lxml")
+
+        videoClass = "yt-simple-endpoint style-scope ytd-video-renderer"
+        videos = soup.find_all('a', class_=videoClass)
+
+        for index, video in enumerate(videos, start=1):
+           print(f"{index}. {video['title']}")
+
+        select = int(input("Reference video by number: "))
+        self.vidLink = videos[select - 1]['href']
+
+        sys.exit()
+
+    def exists(self):
+        exists = os.path.exists("media")
+        if exists == False:
+            os.mkdir("media")
+            self.path = os.getcwd() + "\\media"
+
+        else:
+            self.path = os.getcwd() + "\\media"
+
+    def download(self):
+        self.GetLink()
+
+        yt = YT(self.vidLink)
+        stream = yt.streams[0]
+
+        self.exists()
+
+        stream.download(self.path)
