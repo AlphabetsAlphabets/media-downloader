@@ -18,7 +18,7 @@ from media_downloader import Media
 
 `term` accepts a string; The image of what you want to download.
 
-`quality` accepts a string, dictates the download quality of the image.
+`quality` accepts a string, dictates the download quality of the image. Accepted values: `raw`, `full`, `regular`, `small`, `thumb`
 
 ### media_downloader.Unsplash.download(self)
 `self` the object itself
