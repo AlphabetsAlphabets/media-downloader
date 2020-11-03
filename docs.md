@@ -18,15 +18,19 @@ from media_downloader import Media
 
 `term` accepts a string; The image of what you want to download.
 
+`quality` accepts a string, dictates the download quality of the image.
+
 ### media_downloader.Unsplash.download(self)
 `self` the object itself
 When calling this class method, a new folder called "contents" will be made, automatically if it doesn't exist. If it does then it will proceed, as normal.
 
 # Part 2: Media (The video downloader)
-### media_downloader.Media(self, video)
+### media_downloader.Media(self, video, mp3=False)
 `self` the object itself
 
 `term` accepts a string; The link or title of the video.
+
+`mp3` accepts a boolean, i.e. True/False.
 
 ### media_downloader.Media.GetLink(self):
 `self` the object itself
