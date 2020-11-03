@@ -1,5 +1,8 @@
 __pycache__
 content
-use.py
 media
+
+use.py
 dev.py
+
+geckodriver.log
