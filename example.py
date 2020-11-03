@@ -1,5 +1,5 @@
 # Using Unsplash to download images
-from main import Unsplash
+from media_downloader import Unsplash
 
 # Main method
 un = Unsplash("ferraris")
