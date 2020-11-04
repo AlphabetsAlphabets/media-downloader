@@ -13,12 +13,12 @@ from media_downloader import Media
 ```
 
 # Part 1: Unsplash (Image downloader)
-### media_downloader.Unsplash(self, term)
+### media_downloader.Unsplash(self, term, quality)
 `self` the object itself
 
 `term` accepts a string; The image of what you want to download.
 
-`quality` accepts a string, dictates the download quality of the image. Accepted values: `raw`, `full`, `regular`, `small`, `thumb`
+`quality` accepts a string, dictates the download quality of the image. Accepted values: `raw`, `full`, `regular`, `small`, `thumb`. These are in descending order of quality.
 
 ### media_downloader.Unsplash.download(self)
 `self` the object itself
