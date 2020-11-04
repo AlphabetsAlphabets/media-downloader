@@ -121,8 +121,9 @@ class Media:
             self.exists()
 
             file = stream.download(self.path)
+            change_to = file.strip(".mp4")
             if self.mp3 == True:
-                os.rename(file, f"{file}.mp3")
+                os.rename(file, f"{change_to}.mp3")
 
             sys.exit()
         else:
@@ -134,7 +135,8 @@ class Media:
             self.exists()
 
             file = stream.download(self.path)
+            change_to = file.strip(".mp4")
             if self.mp3 == True:
-                os.rename(file, f"{file}.mp3")
+                os.rename(file, f"{change_to}.mp3")
 
             sys.exit()
