@@ -13,7 +13,7 @@ from media_downloader import Media
 ```
 
 # Part 1: Unsplash (Image downloader)
-### media_downloader.Unsplash(self, term, quality)
+### media_downloader.Unsplash(self, term, quality="small")
 `self` the object itself
 
 `term` accepts a string; The image of what you want to download.
