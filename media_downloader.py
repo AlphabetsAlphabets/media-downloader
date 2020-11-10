@@ -1,6 +1,6 @@
 import requests, json
 from pytube import YouTube
-import os, sys, shutil
+import os, sys
 
 from time import sleep
 
@@ -8,7 +8,15 @@ from bs4 import BeautifulSoup as BS
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-class Unsplash:
+class Link:
+    def __init__(self, term):
+        if " " in term:
+            term = term.split(" ")
+            self.term = "+".join(term)
+        else:
+            self.term = term
+
+class Unsplash(Link):
     creds = {
     "Accept" : "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
     "Accept-Encoding" : "gzip, deflate, br",
@@ -19,20 +27,11 @@ class Unsplash:
     resos = ['raw', 'full', 'regular', 'small', 'thumb']
 
     def __init__(self, term, quality="small"):
-        if " " in term:
-            term = term.split(" ")
-            self.term = "+".join(term)
-            if quality in self.resos:
-                self.quality = quality
-            else:
-                self.quality = "small"
-
+        super().__init__(term)
+        if quality in self.resos:
+            self.quality = quality
         else:
-            self.term = term
-            if quality in self.resos:
-                self.quality = quality
-            else:
-                self.quality = "small"
+            self.quality = "small"
 
         self.url = f"https://unsplash.com/napi/search?query={self.term}&xp=&per_page=20"
 
@@ -61,23 +60,16 @@ class Unsplash:
         r = requests.get(self.url, headers=self.creds)
         return r
 
-class Media:
+class Media(Link):
     opts = Options()
     opts.headless = True
     driver = webdriver.Firefox(options=opts)
 
     def __init__(self, video, mp3=False):
-        if " " in video:
-            term = video.split(" ")
-            term = "+".join(term)
-            self.url = f"https://www.youtube.com/results?search_query={term}"
-            self.link = False
-            self.mp3 = mp3
-
-        elif "https://" in video:
-            self.url = video
-            self.link = True
-            self.mp3 = mp3
+        super().__init__(video)
+        self.url = f"https://www.youtube.com/results?search_query={self.term}"
+        self.link = False
+        self.mp3 = mp3
 
     def GetLink(self):
         self.driver.get(self.url)
