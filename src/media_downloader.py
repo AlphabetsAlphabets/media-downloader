@@ -1,6 +1,6 @@
 import requests, json
 from pytube import YouTube
-import os, sys
+import os, sys, multiprocessing
 
 from time import sleep
 
@@ -61,15 +61,18 @@ class Unsplash(Link):
         return r
 
 class Media(Link):
-    opts = Options()
-    opts.headless = True
-    driver = webdriver.Firefox(options=opts)
-
     def __init__(self, video, mp3=False):
         super().__init__(video)
         self.url = f"https://www.youtube.com/results?search_query={self.term}"
         self.link = False
         self.mp3 = mp3
+        p = multiprocessing.Process(target=self.StartUp())
+        p.start()
+
+    def StartUp(self):
+        opts = Options()
+        opts.headless = True
+        self.driver = webdriver.Firefox(options=opts)
 
     def GetLink(self):
         self.driver.get(self.url)

@@ -1,8 +1,7 @@
-__pycache__
-content
-media
+__pycache__/
+content/
+media/
 
 geckodriver.log
 
-use.py
-dev.py
+src/use.py
