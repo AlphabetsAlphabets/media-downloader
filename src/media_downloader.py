@@ -1,6 +1,6 @@
 import requests, json
 from pytube import YouTube
-import os, sys, multiprocessing
+import os, sys
 
 from time import sleep
 
@@ -66,8 +66,6 @@ class Media(Link):
         self.url = f"https://www.youtube.com/results?search_query={self.term}"
         self.link = False
         self.mp3 = mp3
-        p = multiprocessing.Process(target=self.StartUp())
-        p.start()
 
     def StartUp(self):
         opts = Options()
