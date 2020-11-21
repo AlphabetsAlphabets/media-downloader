@@ -6,21 +6,21 @@ Although this usually isn't needed for the everyday user. You can read it if you
 The preferred way to import either `Unsplash` or `Media` and other packages that follows:
 ```
 # For Unsplash
-from media_downloader import Unsplash
+import image
 
 # For Media
-from media_downloader import Media
+import video
 ```
 
 # Part 1: Unsplash (Image downloader)
-### media_downloader.Unsplash(self, term, quality="small")
+### image.Unsplash(self, term, quality="small")
 `self` the object itself
 
 `term` accepts a string; The image of what you want to download.
 
 `quality` accepts a string, dictates the download quality of the image. Accepted values: `raw`, `full`, `regular`, `small`, `thumb`. These are in descending order of quality.
 
-### media_downloader.Unsplash.download(self)
+### image.Unsplash.download(self)
 `self` the object itself
 When calling this class method, a new folder called "contents" will be made, automatically if it doesn't exist. If it does then it will proceed, as normal.
 

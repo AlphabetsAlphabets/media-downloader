@@ -1,64 +1,12 @@
-import requests, json
-from pytube import YouTube
+from base import *
+from time import sleep
 import os, sys
 
-from time import sleep
-
+from pytube import YouTube
 from bs4 import BeautifulSoup as BS
+
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-
-class Link:
-    def __init__(self, term):
-        if " " in term:
-            term = term.split(" ")
-            self.term = "+".join(term)
-        else:
-            self.term = term
-
-class Unsplash(Link):
-    creds = {
-    "Accept" : "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    "Accept-Encoding" : "gzip, deflate, br",
-    "Accept-Language" : "en-US,en;q=0.5",
-    "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0"
-    }
-
-    resos = ['raw', 'full', 'regular', 'small', 'thumb']
-
-    def __init__(self, term, quality="small"):
-        super().__init__(term)
-        if quality in self.resos:
-            self.quality = quality
-        else:
-            self.quality = "small"
-
-        self.url = f"https://unsplash.com/napi/search?query={self.term}&xp=&per_page=20"
-
-    def download(self):
-        r = requests.get(self.url, headers=self.creds).json()
-
-        exists = os.path.exists("content")
-        if not exists:
-            os.mkdir("content")
-            path = os.getcwd() + "\\content"
-        else:
-            path = os.getcwd() + "\\content"
-
-        total = r['photos']['results']
-        for item in total:
-            name = item['id']
-            image = item['urls'][self.quality]
-
-            with open(f"{path}\\{name}.jpg", 'wb') as f:
-                r = requests.get(image, headers=self.creds).content
-                f.write(r)
-
-        sys.exit()
-
-    def Check_Response(self):
-        r = requests.get(self.url, headers=self.creds)
-        return r
 
 class Media(Link):
     def __init__(self, video, mp3=False):
@@ -67,7 +15,6 @@ class Media(Link):
         self.link = False
         self.mp3 = mp3
 
-    def StartUp(self):
         opts = Options()
         opts.headless = True
         self.driver = webdriver.Firefox(options=opts)
@@ -133,3 +80,11 @@ class Media(Link):
                 os.rename(file, f"{change_to}.mp3")
 
             sys.exit()
+
+def main():
+    video = input("Title of video you want to download: ")
+    M = Media(video)
+    M.download()
+
+if __name__ == "__main__":
+    main()
