@@ -17,8 +17,6 @@ class Unsplash(Link):
         super().__init__(term)
         if quality in self.resos:
             self.quality = quality
-        else:
-            self.quality = "small"
 
         self.url = f"https://unsplash.com/napi/search?query={self.term}&xp=&per_page=50"
 
