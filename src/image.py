@@ -12,7 +12,7 @@ class Unsplash(Link):
     }
 
     resos = ['raw', 'full', 'regular', 'small', 'thumb']
-
+    file = 0
     def __init__(self, term, quality="small"):
         super().__init__(term)
         if quality in self.resos:
@@ -34,9 +34,9 @@ class Unsplash(Link):
         async with aiohttp.ClientSession() as session:
             async with session.get(link) as r:
                 bytes = await r.read()
-                count = random.randint(1, 1000) / 939
-                with open(f"{self.path}\\{self.term}_{count}.png", 'wb') as f:
+                with open(f"{self.path}\\{self.term}_{self.file}.png", 'wb') as f:
                     f.write(bytes)
+                    self.file += 1
 
     async def path_creation(self):
         exists = os.path.exists("content")
@@ -51,7 +51,6 @@ class Unsplash(Link):
 
 def main():
     term = input("Images of what you want to download: ")
-    # term = "cats"
     un = Unsplash(term)
     loop = asyncio.get_event_loop()
 
