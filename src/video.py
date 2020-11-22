@@ -1,4 +1,4 @@
-from base import *
+import base
 from time import sleep
 import os, sys
 
@@ -8,11 +8,10 @@ from bs4 import BeautifulSoup as BS
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-class Media(Link):
+class Media(base.Link):
     def __init__(self, video, mp3=False):
         super().__init__(video)
         self.url = f"https://www.youtube.com/results?search_query={self.term}"
-        self.link = False
         self.mp3 = mp3
 
         opts = Options()
@@ -35,14 +34,14 @@ class Media(Link):
         check = input("Y/n: ").lower()
 
         if check == "y":
-            self.vidLink = videos[0]['href']
+            self.vidLink = f"https://www.youtube.com{videos[0]['href']}"
         else:
             print("Select from this selection of videos to download, and try to find yours.")
             for index, video in enumerate(videos, start=1):
                print(f"{index}. {video['title']}")
 
             select = int(input("Reference video by number: "))
-            self.vidLink = videos[select - 1]['href']
+            self.vidLink = f"https://www.youtube.com{videos[select - 1]['href']}"
 
     def exists(self):
         exists = os.path.exists("media")
@@ -54,36 +53,31 @@ class Media(Link):
             self.path = os.getcwd() + "\\media"
 
     def download(self):
-        if self.link:
-            yt = YT(self.url)
-            stream = yt.streams[0]
+        self.exists()
+        self.GetLink()
 
-            self.exists()
-
+        yt = YouTube(self.vidLink)
+        if self.mp3:
+            stream = yt.streams[-1]
             file = stream.download(self.path)
-            change_to = file.strip(".mp4")
-            if self.mp3 == True:
-                os.rename(file, f"{change_to}.mp3")
-
-            sys.exit()
+            change_to = file.strip(".web")
+            os.rename(file, f"{change_to}.mp3")
         else:
-            self.GetLink()
-
-            yt = YouTube(self.vidLink)
-            stream = yt.streams[0]
-
-            self.exists()
-
+            stream = yt.streams.first()
             file = stream.download(self.path)
-            change_to = file.strip(".mp4")
-            if self.mp3 == True:
-                os.rename(file, f"{change_to}.mp3")
 
-            sys.exit()
+        self.driver.quit()
+        sys.exit()
 
 def main():
     video = input("Title of video you want to download: ")
-    M = Media(video)
+    videoType = input("Download an mp3? [Y/n]: ").lower()
+    if videoType == "y":
+        videoType = True
+    else:
+        videoType = False
+
+    M = Media(video, mp3=videoType)
     M.download()
 
 if __name__ == "__main__":
