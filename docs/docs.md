@@ -21,7 +21,9 @@ import video.main()
 `quality` accepts a string, dictates the download quality of the image. Accepted values: `raw`, `full`, `regular`, `small`, `thumb`. These are in descending order of quality.
 
 __Important note:__ the `main()` function servers as an entry point to interact with the classes, and has no effect on the code. Other than being responsible for starting the download process which includes: 1. Querying the user for what to download. 2. Sending HTTP requests. 3. Downloading the files.
-In order to change the functionality you must change the classes and **not** the contents of `main()`
+In order to change the functionality you must change the classes and **not** the contents of `main()`.
+
+By default, the option to download image quality is static, defaulted to `small`. If you wish to add this functionality, just pass it in as an argument.
 
 ### image.Unsplash.download(self)
 `self` the object itself
