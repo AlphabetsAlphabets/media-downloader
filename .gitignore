@@ -1,6 +1,6 @@
 __pycache__/
-content/
-media/
+src/media/
+src/images/
 
 geckodriver.log
 
