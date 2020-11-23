@@ -52,7 +52,7 @@ class Unsplash(Link):
         imageInformation = await self.harvest_link(self.url)
         imageNames, imageLinks = imageInformation
         links = [self.queue(name, url) for name, url in zip(imageNames, imageLinks)]
-        await asyncio.wait(links)
+        await asyncio.gather(*links)
 
 def main():
     term = input("Images of what you want to download: ")
