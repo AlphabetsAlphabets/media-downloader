@@ -54,8 +54,10 @@ class Unsplash(Link):
         links = [self.queue(name, url) for name, url in zip(imageNames, imageLinks)]
         await asyncio.gather(*links)
 
-def main():
-    term = input("Images of what you want to download: ")
+def main(term=None):
+    if term == None:
+        term = input("Images of what you want to download: ")
+
     un = Unsplash(term)
     loop = asyncio.get_event_loop()
 
