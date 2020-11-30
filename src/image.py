@@ -1,5 +1,5 @@
-import aiohttp, asyncio, random, time, aiofiles
-import os, sys
+import aiohttp, asyncio, aiofiles
+import os, sys, time 
 
 from base import *
 
@@ -12,7 +12,6 @@ class Unsplash(Link):
     }
 
     resos = ['raw', 'full', 'regular', 'small', 'thumb']
-    file = 0
     def __init__(self, term, quality="small"):
         super().__init__(term)
         if quality in self.resos:
@@ -34,18 +33,18 @@ class Unsplash(Link):
         exists = os.path.exists("images")
         if not exists:
             os.mkdir("images")
-            path = os.getcwd() + f"\\images"
+            path = os.getcwd() + f"/images"
             return path
 
         else:
-            path = os.getcwd() + f"\\images"
+            path = os.getcwd() + f"/images"
             return path
 
     async def queue(self, name, URL):
         path = await self.path_creation()
         async with aiohttp.ClientSession() as s:
             async with s.get(URL) as r:
-                async with aiofiles.open(f"{path}\\{name}.png", "wb") as f:
+                async with aiofiles.open(f"{path}/{name}.jpg", "wb") as f:
                     await f.write(await r.read())
 
     async def download(self):
@@ -57,6 +56,8 @@ class Unsplash(Link):
 def main(term=None):
     if term == None:
         term = input("Images of what you want to download: ")
+    else:
+        term = "dogs"
 
     un = Unsplash(term)
     loop = asyncio.get_event_loop()
