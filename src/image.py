@@ -3,7 +3,6 @@ import os, sys, time
 
 from base import *
 
-# aiohttp, aiofiles, pytube, bs4, selenium
 
 class Unsplash(Link):
     creds = {

@@ -17,7 +17,7 @@ class Media(base.Link):
         opts = Options()
         opts.headless = True
         self.driver = webdriver.Firefox(options=opts)
-
+}
     def GetLink(self):
         self.driver.get(self.url)
         sleep(1)
